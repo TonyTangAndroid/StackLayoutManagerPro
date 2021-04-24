@@ -1,16 +1,16 @@
 package com.littlemango.stacklayoutmanager
 
-import android.support.annotation.IntRange
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.SCROLL_STATE_DRAGGING
-import android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE
+import androidx.annotation.IntRange
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_DRAGGING
+import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import android.view.View
 import android.view.ViewGroup
 
 class StackLayoutManager(scrollOrientation: ScrollOrientation,
                           visibleCount: Int,
                           animation: Class<out StackAnimation>,
-                          layout: Class<out StackLayout>) : RecyclerView.LayoutManager() {
+                          layout: Class<out StackLayout>) : androidx.recyclerview.widget.RecyclerView.LayoutManager() {
     private enum class FlingOrientation{NONE, LEFT_TO_RIGHT, RIGHT_TO_LEFT, TOP_TO_BOTTOM, BOTTOM_TO_TOP}
 
     enum class ScrollOrientation{LEFT_TO_RIGHT, RIGHT_TO_LEFT, TOP_TO_BOTTOM, BOTTOM_TO_TOP}
@@ -21,8 +21,8 @@ class StackLayoutManager(scrollOrientation: ScrollOrientation,
 
     private var mScrollOffset: Int
 
-    private lateinit var mOnScrollListener: RecyclerView.OnScrollListener
-    private lateinit var mOnFlingListener: RecyclerView.OnFlingListener
+    private lateinit var mOnScrollListener: androidx.recyclerview.widget.RecyclerView.OnScrollListener
+    private lateinit var mOnFlingListener: androidx.recyclerview.widget.RecyclerView.OnFlingListener
 
     //做动画的组件，支持自定义
     private var mAnimation: StackAnimation? = null
@@ -202,14 +202,14 @@ class StackLayoutManager(scrollOrientation: ScrollOrientation,
         }
     }
 
-    override fun generateDefaultLayoutParams(): RecyclerView.LayoutParams {
-        return RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+    override fun generateDefaultLayoutParams(): androidx.recyclerview.widget.RecyclerView.LayoutParams {
+        return androidx.recyclerview.widget.RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
-    override fun onAttachedToWindow(view: RecyclerView) {
+    override fun onAttachedToWindow(view: androidx.recyclerview.widget.RecyclerView) {
         super.onAttachedToWindow(view)
-        mOnFlingListener = object : RecyclerView.OnFlingListener() {
+        mOnFlingListener = object : androidx.recyclerview.widget.RecyclerView.OnFlingListener() {
             override fun onFling(velocityX: Int, velocityY: Int): Boolean {
                 if (mPagerMode) {
                     when(mScrollOrientation) {
@@ -241,8 +241,8 @@ class StackLayoutManager(scrollOrientation: ScrollOrientation,
         }
         view.onFlingListener = mOnFlingListener
 
-        mOnScrollListener = object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+        mOnScrollListener = object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: androidx.recyclerview.widget.RecyclerView, newState: Int) {
                 if (newState == SCROLL_STATE_IDLE) {
                     if (!mFixScrolling) {
                         mFixScrolling = true
@@ -259,7 +259,7 @@ class StackLayoutManager(scrollOrientation: ScrollOrientation,
         view.addOnScrollListener(mOnScrollListener)
     }
 
-    override fun onDetachedFromWindow(view: RecyclerView?, recycler: RecyclerView.Recycler?) {
+    override fun onDetachedFromWindow(view: androidx.recyclerview.widget.RecyclerView?, recycler: androidx.recyclerview.widget.RecyclerView.Recycler?) {
         super.onDetachedFromWindow(view, recycler)
         if (view?.onFlingListener == mOnFlingListener) {
             view.onFlingListener = null
@@ -287,7 +287,7 @@ class StackLayoutManager(scrollOrientation: ScrollOrientation,
         }
     }
 
-    override fun onLayoutChildren(recycler: RecyclerView.Recycler, state: RecyclerView.State) {
+    override fun onLayoutChildren(recycler: androidx.recyclerview.widget.RecyclerView.Recycler, state: androidx.recyclerview.widget.RecyclerView.State) {
 
         mLayout?.requestLayout()
 
@@ -299,11 +299,11 @@ class StackLayoutManager(scrollOrientation: ScrollOrientation,
         }
     }
 
-    override fun scrollHorizontallyBy(dx: Int, recycler: RecyclerView.Recycler, state: RecyclerView.State): Int {
+    override fun scrollHorizontallyBy(dx: Int, recycler: androidx.recyclerview.widget.RecyclerView.Recycler, state: androidx.recyclerview.widget.RecyclerView.State): Int {
         return handleScrollBy(dx, recycler)
     }
 
-    override fun scrollVerticallyBy(dy: Int, recycler: RecyclerView.Recycler, state: RecyclerView.State?): Int {
+    override fun scrollVerticallyBy(dy: Int, recycler: androidx.recyclerview.widget.RecyclerView.Recycler, state: androidx.recyclerview.widget.RecyclerView.State?): Int {
         return handleScrollBy(dy, recycler)
     }
 
@@ -315,7 +315,7 @@ class StackLayoutManager(scrollOrientation: ScrollOrientation,
         requestLayout()
     }
 
-    override fun smoothScrollToPosition(recyclerView: RecyclerView, state: RecyclerView.State?, position: Int) {
+    override fun smoothScrollToPosition(recyclerView: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State?, position: Int) {
         if (position < 0 || position >= itemCount) {
             throw ArrayIndexOutOfBoundsException("$position is out of bound [0..$itemCount-1]")
         }
@@ -336,7 +336,7 @@ class StackLayoutManager(scrollOrientation: ScrollOrientation,
         }
     }
 
-    private fun handleScrollBy(offset: Int, recycler: RecyclerView.Recycler): Int {
+    private fun handleScrollBy(offset: Int, recycler: androidx.recyclerview.widget.RecyclerView.Recycler): Int {
         //期望值，不得超过最大最小值，所以期望值不一定等于实际值
         val expectOffset = mScrollOffset + offset
 
@@ -357,7 +357,7 @@ class StackLayoutManager(scrollOrientation: ScrollOrientation,
         return exactMove
     }
 
-    private fun loadItemView(recycler: RecyclerView.Recycler) {
+    private fun loadItemView(recycler: androidx.recyclerview.widget.RecyclerView.Recycler) {
         val firstVisiblePosition = getFirstVisibleItemPosition()
         val lastVisiblePosition = getLastVisibleItemPosition()
 
@@ -400,12 +400,12 @@ class StackLayoutManager(scrollOrientation: ScrollOrientation,
         view.alpha = 1f
     }
 
-    private fun calculateAndScrollToTarget(view: RecyclerView) {
+    private fun calculateAndScrollToTarget(view: androidx.recyclerview.widget.RecyclerView) {
         val targetPosition = calculateCenterPosition(getFirstVisibleItemPosition())
         scrollToCenter(targetPosition, view, true)
     }
 
-    private fun scrollToCenter(targetPosition: Int, recyclerView: RecyclerView, animation: Boolean) {
+    private fun scrollToCenter(targetPosition: Int, recyclerView: androidx.recyclerview.widget.RecyclerView, animation: Boolean) {
         val targetOffset = getPositionOffset(targetPosition)
         when(mScrollOrientation) {
             ScrollOrientation.LEFT_TO_RIGHT, ScrollOrientation.RIGHT_TO_LEFT -> {
